@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-plt.plot(np.linspace(0,100,100), np.random.normal(0,1,100))
-plt.show()
+import b
+x = np.linspace(0,6.28,100)
+y = np.sin(x)
+b.f(x,y)
