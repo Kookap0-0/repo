@@ -20,20 +20,26 @@ def r(leds, bin):
     return temp
 while(True):
     g.output(leds, 0) 
-    if(g.input(up)):
-        if(num==7):
-            num=0
-        else:
-            num+=1
-        print(num, f(num))
-        g.output(r(leds,f(num)), 1)
+    upx = g.input(up)
+    downx = g.input(down)
+    if((upx+downx)>1):
+        g.output(leds, 1)
         t.sleep(sleep_time)
-    if(g.input(down)):
-        if(num>0):
-            num-=1
-        else:
-            num=0
-        print(num, f(num))
-        g.output(r(leds,f(num)), 1)
-        t.sleep(sleep_time)
+    else:    
+        if(upx):
+            if(num==7):
+                num=0
+            else:
+                num+=1
+            print(num, f(num))
+            g.output(r(leds,f(num)), 1)
+            t.sleep(sleep_time)
+        if(downx):
+            if(num>0):
+                num-=1
+            else:
+                num=0
+            print(num, f(num))
+            g.output(r(leds,f(num)), 1)
+            t.sleep(sleep_time)
    
