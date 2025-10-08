@@ -18,11 +18,10 @@ class PWM_DAC:
             print(f"Напряжение выходит за динамический диапазон ЦАП (0.00 - {self.dynamic_range:.2f} В)")
             print("Устанавлниваем 0.0 В")
             return
-        temp = int(voltage / self.dynamic_range * 255)
         g.output(self.gpio_pin, 1)
-        t.sleep(temp/(255*self.pwm_frequency))
+        t.sleep(voltage/(self.pwm_frequency*self.dynamic_range))
         g.output(self.gpio_pin, 0)
-        t.sleep((255-temp)/(255*self.pwm_frequency))
+        t.sleep((self.dynamic_range-voltage)/(self.pwm_frequency*self.dynamic_range))
         
 if __name__ == "__main__":
     try:
