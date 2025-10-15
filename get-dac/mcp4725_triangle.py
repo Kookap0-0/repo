@@ -12,7 +12,7 @@ if __name__ == "__main__":
         epoch = t.asctime(t.gmtime(0))
         while True:
             try:
-                voltage = 0.5*amplitude*sg.get_sin_wave_amplitude(signal_frequency, t.time())
+                voltage = sg.triangle(signal_frequency, t.time(), amplitude)
                 mcp.set_voltage(voltage)
                 sg.wait_for_sampling_period(sampling_frequency)
             except ValueError:
