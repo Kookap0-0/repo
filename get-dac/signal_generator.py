@@ -4,10 +4,22 @@ def get_sin_wave_amplitude(freq,time):
     return 1+np.sin(2*np.pi*freq*time)
 def wait_for_sampling_period(sampling_frequency):
     t.sleep(1/sampling_frequency)
-def triangle(freq, time,amp):
-    period = 1.0/freq
-    new_time = (time%period)/period
-    if (t<0.5):
-        return 2*amp*new_time
+def triangle(freq, time, amp):
+    period = 1.0 / freq  # Calculate the full period
+    # Normalize time to be within one period [0, period)
+    time_in_period = time % period
+    # Calculate normalized position within period [0, 1)
+    normalized_time = time_in_period / period
+    
+    if normalized_time < 0.25:
+        # First quarter: going down from amp to 0
+        return amp * (1 - 4 * normalized_time)
+    elif normalized_time < 0.5:
+        # Second quarter: going up from 0 to amp
+        return amp * (4 * (normalized_time - 0.25))
+    elif normalized_time < 0.75:
+        # Third quarter: going down from amp to 0
+        return amp * (1 - 4 * (normalized_time - 0.5))
     else:
-        return 2*amp*(1-new_time)
+        # Fourth quarter: going up from 0 to amp
+        return amp * (4 * (normalized_time - 0.75))

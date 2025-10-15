@@ -2,8 +2,8 @@ import mcp4725_driver
 import signal_generator as sg
 import time as t
 
-amplitude = 4
-signal_frequency = 10
+amplitude = 5
+signal_frequency = 0.25
 sampling_frequency = 100
 
 if __name__ == "__main__":
