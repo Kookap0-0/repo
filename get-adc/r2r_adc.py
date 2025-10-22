@@ -36,9 +36,23 @@ class R2R_ADC:
                 return
         print(levels, self.dynamic_range)
 
+    def get_volatge(self):
+        levels = 2**len(self.bits_gpio)
+        for i in range(levels):    
+            self.set_number(i)
+            t.sleep(self.compare_time)
+            comparatorValue = g.input(self.comp_gpio)
+            if comparatorValue==1:
+                print(i, i*self.get_sc_voltage())
+                return i*self.get_sc_voltage()
+        print(levels, self.dynamic_range)
+        return self.dynamic_range
+
+
+
 if __name__ == "__main__":
     try:
-        adc = R2R_ADC(3.278, 0.01, True)
+        adc = R2R_ADC(3.278, 0.001, True)
         
         while True:
             try:
