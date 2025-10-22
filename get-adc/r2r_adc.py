@@ -21,42 +21,56 @@ class R2R_ADC:
         temp = [int(element) for element in bin(number)[2:].zfill(8)]
         for i in range(len(self.bits_gpio)):
             g.output(self.bits_gpio[i], temp[i])
+
     def get_sc_voltage(self):
-        return self.dynamic_range/(2**len(self.bits_gpio))
+        levels = 2**len(self.bits_gpio)
+        return self.sequential_counting_adc()* self.dynamic_range/levels
 
 
     def sequential_counting_adc(self):
         levels = 2**len(self.bits_gpio)
         for i in range(levels):    
             self.set_number(i)
-            t.sleep(0.01)
-            comparatorValue = g.input(self.comp_gpio)
-            if comparatorValue==1:
-                print(i, i*self.get_sc_voltage())
-                return
-        print(levels, self.dynamic_range)
-
-    def get_volatge(self):
-        levels = 2**len(self.bits_gpio)
-        for i in range(levels):    
-            self.set_number(i)
             t.sleep(self.compare_time)
             comparatorValue = g.input(self.comp_gpio)
             if comparatorValue==1:
-                print(i, i*self.get_sc_voltage())
-                return i*self.get_sc_voltage()
+                print(i, i/levels *self.dynamic_range)
+                return i
         print(levels, self.dynamic_range)
-        return self.dynamic_range
+        return levels
+        
 
+    def successive_approximation_adc(self):
+        levels = 2**len(self.bits_gpio)
+        low = 0
+        high = 256
+        while low<=high:
+            mid = (low+high)//2
+            self.set_number(mid)
+            t.sleep(self.compare_time)
+            comparatorValue = g.input(self.comp_gpio)
+            if comparatorValue==0:
+                low = mid+1
+            else:
+                high = mid-1
+
+        print(mid, mid*self.dynamic_range/levels)
+        return mid
+
+    def get_sar_voltage(self):
+        levels = 2**len(self.bits_gpio)
+        return self.successive_approximation_adc()* self.dynamic_range/levels
 
 
 if __name__ == "__main__":
     try:
-        adc = R2R_ADC(3.278, 0.001, True)
+        adc = R2R_ADC(3.278, 0.01, True)
+
         
         while True:
             try:
-                adc.sequential_counting_adc()
+                #adc.sequential_counting_adc()
+                adc.successive_approximation_adc()
 
             except KeyboardInterrupt():
                 print("Keyboard interruption\n")

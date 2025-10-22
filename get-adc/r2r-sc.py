@@ -2,7 +2,7 @@ import time as t
 import r2r_adc as r2r
 import adc_plot
 
-adc = r2r.R2R_ADC(3.278, 0.01, True)
+adc = r2r.R2R_ADC(3.278, 0.005, True)
 voltage_values = []
 time_values = []
 duration = 10.0
@@ -12,7 +12,8 @@ try:
     current_time = t.time()
     while(current_time-start_time<duration):
         try:
-            voltage_values.append(adc.get_volatge())
+            # voltage_values.append(adc.get_sc_voltage())
+            voltage_values.append(adc.get_sar_voltage())
             current_time = t.time()
             time_values.append(current_time-start_time)
 
@@ -22,4 +23,5 @@ try:
 finally:
     adc.deinit()
 
-adc_plot.plot_voltage_vs_time(time_values, voltage_values, adc.dynamic_range, duration)
+# adc_plot.plot_voltage_vs_time(time_values, voltage_values, adc.dynamic_range, duration)
+adc_plot.plot_sampling_period_hist(time_values)
