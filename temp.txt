@@ -1,13 +1,20 @@
-class R2R_ADC:
-    def __init__(self, dynamic_range, compare_time = 0.01, verbose = False):
-        self.dynamic_range = dynamic_range
-        self.verbose = verbose
-        self.compare_time = compare_time
-        
-        self.bits_gpio = [26, 20, 19, 16, 13, 12, 25, 11]
-        self.comp_gpio = 21
+import smbus
 
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.bits_gpio, GPIO.OUT, initial = 0)
-        GPIO.setup(self.comp_gpio, GPIO.IN)
-[16,20,21,25,26,17,27,22]
+class MCP3021:
+    def __init__(self, dynamic_range, verbose = False):
+        self.bus = smbus.SMBus(1)
+        self.dynamic_range = dynamic_range
+        self.address = 0x4D
+        self.verbose = verbose
+
+def deinit(self):
+    self.bus.close()
+
+def get_number(self):
+    data = self.bus.read_word_data(self.address, 0)
+    lower_data_byte = data >> 8
+    upper_data_byte = data & 0xFF
+    number = (upper_data_byte << 6) | (lower_data_byte >> 2)
+    if self.verbose:
+        print(f"Принятые данные: {data}, Старший байт: {upper_data_byte:x}, Младший байт: {lower_data_byte:x}, Число: {number}")
+    return number
