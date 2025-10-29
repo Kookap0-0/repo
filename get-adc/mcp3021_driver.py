@@ -26,16 +26,20 @@ class MCP3021:
     #     self.bus.write_byte_data(0x61, first_byte, second_byte)
     
     def get_voltage(self):
-        print(f"Напряжение: {self.get_number()*self.dynamic_range/652}")
+        voltage = self.get_number()*self.dynamic_range/652
+        if self.verbose:
+            print(f"Напряжение: {voltage}")
+        return voltage
+        
 
 if __name__ == "__main__":
     try:
-        adc = MCP3021(3.283, False)
+        adc = MCP3021(3.283, True)
         
         while True:
             try:
                 adc.get_voltage()
-                t.sleep(1)
+                t.sleep(1.1)
 
             except KeyboardInterrupt():
                 print("Keyboard interruption\n")

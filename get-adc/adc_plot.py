@@ -24,7 +24,7 @@ def plot_sampling_period_hist(time):
     plt.title('Распределение периодов дискредитации измерений по времени на одно измерение')
     plt.xlabel('Период измерения, с')
     plt.ylabel('Количество измерений')
-    plt.xlim(0, 0.6)
+    plt.xlim(0, 0.06)
     plt.grid(which='major',linestyle='-')
     plt.minorticks_on()
     plt.grid(which='minor',linestyle='--', linewidth = 0.5)
